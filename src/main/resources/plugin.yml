@@ -3,5 +3,5 @@ version: 1.0.0
 main: me.ownsample.dc_auth.dc_auth
 description: Auth via discord
 author: OwnSample
-website: https://exmaple.com
+website: https://github.com/OwnSample-hash/dc_auth
 api-version: '1.20'
