@@ -2,11 +2,13 @@ token: "token"
 jdbc: "jdbc:mysql://"
 embed:
   server_name: "Server"
-  delay: 30
+  delay:
+    no_resp: 30
+    resp: 5
   image: "https://example.com"
   link:
     title: "Link with Server!"
-    message: "Do you want to link your account to %s?"
+    message: "Do you want to link your account to %s? You have %d seconds to react!"
     accept: "Successfully link account!"
     reject: "Account linking has been rejected!"
     linked: "Your account has been successfully linked with %s"
