@@ -1,2 +1,2 @@
-rootProject.name = "dc_uath"
+rootProject.name = "dc_auth"
 
