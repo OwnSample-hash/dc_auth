@@ -7,5 +7,9 @@ website: https://github.com/OwnSample-hash/dc_auth
 api-version: '1.20'
 commands:
   link:
-    description: "Link your account"
+    description: Link your account
     usage: /<command> id
+  query:
+    description: Query linked accounts
+    usage: /<command>
+    permission: op

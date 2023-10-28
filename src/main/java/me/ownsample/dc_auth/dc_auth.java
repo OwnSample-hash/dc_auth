@@ -37,7 +37,9 @@ public class dc_auth extends JavaPlugin  {
             getLogger().severe("SQLException");
             getLogger().severe(e.getMessage());
         }
-        getCommand("link").setExecutor(new Link(con, this));
+        getCommand("link").setExecutor(new Link(this));
+        getCommand("query").setExecutor(new Query(this));
+        Bukkit.getPluginManager().registerEvents(new onJoin(this), this);
         //Bukkit.getPluginManager().registerEvents(new Freeze(this), this);
     }
 
