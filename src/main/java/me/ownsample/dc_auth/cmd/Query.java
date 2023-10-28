@@ -29,6 +29,8 @@ public record Query(dc_auth pl) implements CommandExecutor {
                 String name = rs.getString("name");
                 sender.sendPlainMessage("ID: "  + id + "    Name: " + name);
             }
+            rs.close();
+            smt.close();
         } catch (SQLException e) {
             pl.getLogger().severe("SQLException");
             pl.getLogger().severe(e.getMessage());
