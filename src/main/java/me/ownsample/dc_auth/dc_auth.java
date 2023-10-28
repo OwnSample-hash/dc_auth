@@ -1,21 +1,23 @@
 package me.ownsample.dc_auth;
 
 import me.ownsample.dc_auth.EventHandlers.dc_listener;
+import me.ownsample.dc_auth.EventHandlers.onJoin;
 import me.ownsample.dc_auth.cmd.Link;
+import me.ownsample.dc_auth.cmd.Query;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.sql.*;
 public class dc_auth extends JavaPlugin  {
 
     public static JDA jda;
-    public static List<Player> frozen_players = new ArrayList<Player>();
+    public List<Player> frozen_players = new ArrayList<Player>();
+    public Map<Long, String> link_q = new HashMap<Long, String>();
     public Connection con;
 
     @Override
@@ -28,7 +30,7 @@ public class dc_auth extends JavaPlugin  {
             con = DriverManager.getConnection(Objects.requireNonNull(getConfig().getString("jdbc")));
             Statement stm = con.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS auth (" +
-                    "    id INT NOT NULL PRIMARY KEY," +
+                    "    id BIGINT NOT NULL PRIMARY KEY," +
                     "    name VARCHAR(255) NOT NULL" +
                     ");";
             stm.executeUpdate(sql);
