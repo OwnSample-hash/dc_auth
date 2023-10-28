@@ -13,3 +13,7 @@ commands:
     description: Query linked accounts
     usage: /<command>
     permission: op
+  delete:
+    description: Delete linked account
+    usage: /<command> method value
+    permission: op
