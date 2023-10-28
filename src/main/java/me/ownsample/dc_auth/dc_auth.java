@@ -2,6 +2,7 @@ package me.ownsample.dc_auth;
 
 import me.ownsample.dc_auth.EventHandlers.dc_listener;
 import me.ownsample.dc_auth.EventHandlers.onJoin;
+import me.ownsample.dc_auth.cmd.Delete;
 import me.ownsample.dc_auth.cmd.Link;
 import me.ownsample.dc_auth.cmd.Query;
 import net.dv8tion.jda.api.JDA;
@@ -41,6 +42,7 @@ public class dc_auth extends JavaPlugin  {
         }
         getCommand("link").setExecutor(new Link(this));
         getCommand("query").setExecutor(new Query(this));
+        getCommand("delete").setExecutor(new Delete(this));
         Bukkit.getPluginManager().registerEvents(new onJoin(this), this);
         //Bukkit.getPluginManager().registerEvents(new Freeze(this), this);
     }
