@@ -1,0 +1,20 @@
+token: "token"
+jdbc: "jdbc:mysql://"
+embed:
+  server_name: "Server"
+  delay: 30
+  image: "https://example.com"
+  link:
+    title: "Link with Server!"
+    message: "Do you want to link your account to %s?"
+    accept: "Successfully link account!"
+    reject: "Account linking has been rejected!"
+    linked: "Your account has been successfully linked with %s"
+  login:
+    title: "Login to Server!"
+    message: "Do you want to log in %s?"
+    accepted: "%s account login has been approved."
+    rejected: "Login has been rejected for %s!"
+  color: 0x6332A8
+  btn_apr: "Approve"
+  btn_rej: "Reject"
