@@ -33,7 +33,7 @@ public record Link(dc_auth pl) implements CommandExecutor {
                 if (!rs.isBeforeFirst()) {
                     //Empty we need link
                     if (args.length == 0) {
-                        player.sendRichMessage("&1Usage: /link <discord id>");
+                        player.sendRichMessage("Usage: /link <discord id>");
                         return true;
                     }
                     String id = args[0];
@@ -42,12 +42,11 @@ public record Link(dc_auth pl) implements CommandExecutor {
                         if (user.isBot() || user.isSystem()) {
                             pl.getLogger().warning(player.getName() + " tired to be funny and  sent a bot/system " +
                                     "account id");
-                            player.sendRichMessage("&2You sent a bot/system account id");
+                            player.sendRichMessage("You sent a bot/system account id");
                             ret.set(true);
                             return;
                         }
-                        player.sendRichMessage("&4Linking... check dc!");
-                        pl.getLogger().info("Got info " + user.getName() + " " + user.getIdLong());
+                        player.sendRichMessage("Linking... check dc!");
                         user.openPrivateChannel().queue(dm -> {
                             EmbedBuilder eb = new EmbedBuilder();
                             eb.setTitle(pl.getConfig().getString("embed.link.title"));
