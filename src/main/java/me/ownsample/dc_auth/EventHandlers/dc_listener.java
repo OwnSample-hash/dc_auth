@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.restaction.interactions.MessageEditCallbackAction;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,20 +37,7 @@ public class dc_listener implements EventListener {
         msg.queue();
         Message msg_ = btn_event.getMessage();
         msg_.delete().queueAfter(pl.getConfig().getInt("embed.delay.resp"), TimeUnit.SECONDS);
-        for (Map.Entry<Long, String> e:pl.link_q.entrySet()) {
-            if (e.getKey() == btn_event.getUser().getIdLong()){
-                pl.getLogger().info(e.getKey().toString());
-                pl.getLogger().info(e.getValue());
-                String sql = "INSERT INTO auth VALUES ("+ e.getKey() + ",\"" + e.getValue()+"\")";
-                pl.getLogger().info(sql);
-                Statement stm = pl.con.createStatement();
-                stm.executeUpdate(sql);
-                stm.close();
-            } else{
-                pl.getLogger().severe(String.format("FAILED TO FIND ID: %d in link_q",
-                        btn_event.getUser().getIdLong()));
-            }
-        }
+
     }
 
     @Override
@@ -58,10 +47,36 @@ public class dc_listener implements EventListener {
         }
         if (event instanceof ButtonInteractionEvent btn_event){
             try {
-                if (btn_event.getComponentId().equals("apr"))
+                if (btn_event.getComponentId().equals("apr")) {
                     onBtnEventHelper(btn_event, "embed.link.accept");
-                else
+                    for (Map.Entry<Long, String> e : pl.link_q.entrySet()) {
+                        if (e.getKey() == btn_event.getUser().getIdLong()) {
+                            String sql = "INSERT INTO auth VALUES (" + e.getKey() + ",\"" + e.getValue() + "\")";
+                            Statement stm = pl.con.createStatement();
+                            stm.executeUpdate(sql);
+                            stm.close();
+                            Player player = Bukkit.getPlayer(e.getValue());
+                            if (player == null)
+                                pl.getLogger().warning("Failed to notify player("+e.getValue()+") about successful" +
+                                        " linking");
+                            player.sendPlainMessage("Account linking has been successful!");
+                        } else {
+                            pl.getLogger().severe(String.format("FAILED TO FIND ID: %d in link_q",
+                                    btn_event.getUser().getIdLong()));
+                        }
+                    }
+                } else {
                     onBtnEventHelper(btn_event, "embed.link.reject");
+                    for (Map.Entry<Long, String> e : pl.link_q.entrySet()) {
+                        if (e.getKey() == btn_event.getUser().getIdLong()) {
+                            Player player = Bukkit.getPlayer(e.getValue());
+                            if (player == null)
+                                pl.getLogger().warning("Failed to notify player("+e.getValue()+") about rejected " +
+                                        "linking");
+                            player.sendPlainMessage("Account linking has been rejected!");
+                        }
+                    }
+                }
             } catch (SQLException e) {
                 pl.getLogger().severe("SQLException");
                 pl.getLogger().severe(e.getMessage());
