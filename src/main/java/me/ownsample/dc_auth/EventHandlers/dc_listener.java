@@ -106,7 +106,7 @@ public class dc_listener implements EventListener {
                     rs.close();
                     smt.close();
                 }else if (btn_event.getComponentId().equals("rej-login")){
-                    onBtnEventHelper(btn_event, "reject", "login");
+                    onBtnEventHelper(btn_event, "rejected", "login");
                     Statement smt = pl.con.createStatement();
                     String sql = "SELECT name FROM auth WHERE id = "+btn_event.getUser().getIdLong()+";";
                     ResultSet rs = smt.executeQuery(sql);
