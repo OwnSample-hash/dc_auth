@@ -15,7 +15,7 @@ public record Delete(dc_auth pl) implements CommandExecutor {
                              @NotNull Command command,
                              @NotNull String label,
                              @NotNull String[] args) {
-        if (args.length > 2){
+        if (args.length > 2) {
             sender.sendPlainMessage("Usage: /delete <id:name> <value>"+args.length);
             return true;
         }
