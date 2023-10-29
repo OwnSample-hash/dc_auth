@@ -1,5 +1,7 @@
 package me.ownsample.dc_auth.EventHandlers;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import me.ownsample.dc_auth.dc_auth;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -12,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.transform.Result;
 import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +38,6 @@ public class dc_listener implements EventListener {
         msg.queue();
         Message msg_ = btn_event.getMessage();
         msg_.delete().queueAfter(pl.getConfig().getInt("embed.delay.resp"), TimeUnit.SECONDS);
-
     }
 
     @Override
@@ -46,6 +46,7 @@ public class dc_listener implements EventListener {
             pl.getLogger().info("DC API is ready!");
         }
         if (event instanceof ButtonInteractionEvent btn_event){
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
             try {
                 if (btn_event.getComponentId().equals("apr-link")) {
                     onBtnEventHelper(btn_event, "accept", "link");
@@ -60,6 +61,9 @@ public class dc_listener implements EventListener {
                                 pl.getLogger().warning("Failed to notify player("+e.getValue()+") about successful" +
                                         " linking");
                             player.sendPlainMessage("Account linking has been successful!");
+                            out.writeUTF("Connect");
+                            out.writeUTF("main");
+                            player.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
                         } else {
                             pl.getLogger().severe(String.format("FAILED TO FIND ID: %d in link_q",
                                     btn_event.getUser().getIdLong()));
@@ -74,6 +78,10 @@ public class dc_listener implements EventListener {
                                 pl.getLogger().warning("Failed to notify player("+e.getValue()+") about rejected " +
                                         "linking");
                             player.sendPlainMessage("Account linking has been rejected!");
+                            out.writeUTF("KickPlayer");
+                            out.writeUTF(player.getName());
+                            out.writeUTF("Link rejected!");
+                            player.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
                         }
                     }
                 } else if (btn_event.getComponentId().equals("apr-login")){
@@ -81,12 +89,17 @@ public class dc_listener implements EventListener {
                     Statement smt = pl.con.createStatement();
                     String sql = "SELECT name FROM auth WHERE id = "+btn_event.getUser().getIdLong()+";";
                     ResultSet rs = smt.executeQuery(sql);
+                    if (!rs.isBeforeFirst())
+                        pl.getLogger().severe("Empty query: " + sql);
                     while (rs.next()){
                         String name = rs.getString("name");
                         Player player = Bukkit.getPlayer(name);
                         if (player == null)
                             pl.getLogger().warning("Player("+name+") logged in!");
                         player.sendPlainMessage("Logged in!");
+                        out.writeUTF("Connect");
+                        out.writeUTF("main");
+                        player.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
                     }
                     rs.close();
                     smt.close();
@@ -99,8 +112,12 @@ public class dc_listener implements EventListener {
                         String name = rs.getString("name");
                         Player player = Bukkit.getPlayer(name);
                         if (player == null)
-                            pl.getLogger().warning("Player("+name+") logged rejected in!");
+                            pl.getLogger().warning("Player("+name+") login rejected in!");
                         player.sendPlainMessage("Login rejected!");
+                        out.writeUTF("KickPlayer");
+                        out.writeUTF(player.getName());
+                        out.writeUTF("Login rejected!");
+                        player.sendPluginMessage(pl, "BungeeCord", out.toByteArray());
                     }
                     rs.close();
                     smt.close();
