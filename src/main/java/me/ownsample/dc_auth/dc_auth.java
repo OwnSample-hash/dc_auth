@@ -19,6 +19,7 @@ public class dc_auth extends JavaPlugin  {
     public Map<Long, String> link_q = new HashMap<Long, String>();
     public Connection con;
 
+    public Timer timer = new Timer();
     @Override
     public void onEnable() {
         saveDefaultConfig();
