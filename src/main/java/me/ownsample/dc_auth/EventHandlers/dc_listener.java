@@ -94,8 +94,10 @@ public class dc_listener implements EventListener {
                     while (rs.next()){
                         String name = rs.getString("name");
                         Player player = Bukkit.getPlayer(name);
-                        if (player == null)
-                            pl.getLogger().warning("Player("+name+") logged in!");
+                        if (player == null) {
+                            pl.getLogger().warning("Player(" + name + ") failed login in!");
+                            return;
+                        }
                         player.sendPlainMessage("Logged in!");
                         out.writeUTF("Connect");
                         out.writeUTF("main");
@@ -111,8 +113,10 @@ public class dc_listener implements EventListener {
                     while (rs.next()) {
                         String name = rs.getString("name");
                         Player player = Bukkit.getPlayer(name);
-                        if (player == null)
-                            pl.getLogger().warning("Player("+name+") login rejected in!");
+                        if (player == null) {
+                            pl.getLogger().warning("Player(" + name + ") login rejected in!");
+                            return;
+                        }
                         player.sendPlainMessage("Login rejected!");
                         out.writeUTF("KickPlayer");
                         out.writeUTF(player.getName());
