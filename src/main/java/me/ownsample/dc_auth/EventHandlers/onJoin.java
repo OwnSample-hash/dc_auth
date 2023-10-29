@@ -23,14 +23,14 @@ public record onJoin(dc_auth pl) implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         pl.getLogger().info("Authing user: " + event.getPlayer().getName());
-        pl.frozen_players.add(event.getPlayer().getName());
+        pl.login_q.add(event.getPlayer().getName());
         try {
             Statement smt = pl.con.createStatement();
             String sql = "SELECT id FROM auth WHERE name = \""+event.getPlayer().getName()+"\";";
             ResultSet rs = smt.executeQuery(sql);
             if (!rs.isBeforeFirst()){
-                //Empty
                 pl.getLogger().severe("Failed to look up name: "+event.getPlayer().getName());
+                event.getPlayer().sendPlainMessage("Use: \"/link <dc id>\" to link your account..");
                 rs.close();
                 smt.close();
                 return;
@@ -39,7 +39,7 @@ public record onJoin(dc_auth pl) implements Listener {
                 long id = rs.getLong("id");
                 jda.retrieveUserById(id).queue(user -> {
                     if (user.isBot() || user.isSystem()) {
-                        pl.getLogger().warning(event.getPlayer().getName() + " tired to be funny and  sent a " +
+                        pl.getLogger().warning(event.getPlayer().getName() + " tired to be funny and sent a " +
                                 "bot/system account id");
                         event.getPlayer().sendRichMessage("You sent a bot/system account id");
                         return;
