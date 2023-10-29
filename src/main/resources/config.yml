@@ -9,14 +9,13 @@ embed:
   link:
     title: "Link with Server!"
     message: "Do you want to link your account to %s? You have %d seconds to react!"
-    accept: "Successfully link account!"
+    accept: "Successfully linked account!"
     reject: "Account linking has been rejected!"
-    linked: "Your account has been successfully linked with %s"
   login:
     title: "Login to Server!"
     message: "Do you want to log in %s?"
-    accepted: "%s account login has been approved."
-    rejected: "Login has been rejected for %s!"
+    accepted: "Account login has been approved."
+    rejected: "Login has been rejected!"
   color: 0x6332A8
   btn_apr: "Approve"
   btn_rej: "Reject"
