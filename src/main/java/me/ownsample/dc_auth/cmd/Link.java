@@ -54,10 +54,9 @@ public record Link(dc_auth pl) implements CommandExecutor {
                             eb.setThumbnail(pl.getConfig().getString("embed.image"));
                             eb.setDescription(String.format(pl.getConfig().getString("embed.link.message"),
                                     player.getName(), pl.getConfig().getInt("embed.delay.no_resp")));
-                            //msg.delete().queueAfter(pl.getConfig().getInt("embed.delay"), TimeUnit.SECONDS);
                             MessageCreateAction l = dm.sendMessageEmbeds(eb.build()).addActionRow(
-                                    Button.primary("apr", pl.getConfig().getString("embed.btn_apr")),
-                                    Button.danger("rej", pl.getConfig().getString("embed.btn_rej"))
+                                    Button.primary("apr-link", pl.getConfig().getString("embed.btn_apr")),
+                                    Button.danger("rej-link", pl.getConfig().getString("embed.btn_rej"))
                             );
                             l.queue();
                             l.flatMap(Message::delete).queueAfter(pl.getConfig().getInt("embed.delay.no_resp"),
