@@ -8,16 +8,14 @@ import me.ownsample.dc_auth.cmd.Query;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.*;
 import java.sql.*;
 public class dc_auth extends JavaPlugin  {
 
     public static JDA jda;
-    public List<Player> frozen_players = new ArrayList<Player>();
+    public List<String> frozen_players = new ArrayList<String>();
     public Map<Long, String> link_q = new HashMap<Long, String>();
     public Connection con;
 
