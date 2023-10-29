@@ -1,5 +1,7 @@
 package me.ownsample.dc_auth.EventHandlers;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import me.ownsample.dc_auth.dc_auth;
 import static me.ownsample.dc_auth.dc_auth.jda;
 
@@ -16,6 +18,7 @@ import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public record onJoin(dc_auth pl) implements Listener {
@@ -23,6 +26,16 @@ public record onJoin(dc_auth pl) implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         pl.getLogger().info("Authing user: " + event.getPlayer().getName());
+        pl.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("KickPlayer");
+                out.writeUTF(event.getPlayer().getName());
+                out.writeUTF("Login timed out!");
+                event.getPlayer().sendPluginMessage(pl, "BungeeCord", out.toByteArray());
+            }
+        }, pl.getConfig().getInt("embed.delay.no_resp") * 1000);
         pl.login_q.add(event.getPlayer().getName());
         try {
             Statement smt = pl.con.createStatement();
