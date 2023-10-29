@@ -15,7 +15,7 @@ import java.sql.*;
 public class dc_auth extends JavaPlugin  {
 
     public static JDA jda;
-    public List<String> frozen_players = new ArrayList<String>();
+    public List<String> login_q = new ArrayList<String>();
     public Map<Long, String> link_q = new HashMap<Long, String>();
     public Connection con;
 
@@ -41,8 +41,8 @@ public class dc_auth extends JavaPlugin  {
         getCommand("link").setExecutor(new Link(this));
         getCommand("query").setExecutor(new Query(this));
         getCommand("delete").setExecutor(new Delete(this));
-        Bukkit.getPluginManager().registerEvents(new onJoin(this), this);
-        //Bukkit.getPluginManager().registerEvents(new Freeze(this), this);
+        getServer().getPluginManager().registerEvents(new onJoin(this), this);
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
     @Override
